@@ -1,0 +1,28 @@
+name: CI - CJ4 Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm run install:cj4
+      - name: Build Package
+        run: powershell.exe -noexit .\build.ps1 -OutputPath '.\build' -Project 'workingtitle-project-cj4meta.xml' -CleanBuild 
+      # - name: Upload Package
+      #   uses: actions/upload-artifact@v2.1.4
+      #   with:
+      #     name: workingtitle-cj4
+      #     path: |
+      #       build/workingtitle-aircraft-cj4
+      #       build/workingtitle-vcockpits-instruments-cj4
+      #       build/workingtitle-vcockpits-instruments-airliners
+      #     if-no-files-found: error
